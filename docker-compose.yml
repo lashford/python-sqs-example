@@ -1,0 +1,28 @@
+# Docker Compose Definitions for local Developer Environment
+# - Use this file as follows:
+#   docker-compose -f docker/docker-compose.yml up
+version: "2.1"
+
+services:
+  queue:
+    image: localstack/localstack:0.7.4
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "-", "http://localhost:8080/"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "4576:4576"
+    environment:
+      - SERVICES=sqs:4576
+      - DEBUG=false
+      - DEFAULT_REGION=us-east-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "./target/localstack:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - internal
+networks:
+  external:
+  internal:
