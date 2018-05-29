@@ -24,8 +24,11 @@ def main():
             msg_id = msg['MessageId']
             print("Message ID -> %s" % msg_id)
 
+            receipt_handle = msg['ReceiptHandle']
+            print("Receipt Handle -> %s" % receipt_handle)
+            
             print('Delete Message')
-            sqs.delete_message(queue_url, msg_id)
+            sqs.delete_message(queue_url, receipt_handle)
 
             print('Delete Queue')
             sqs.delete_queue(queue_url)
